@@ -1,0 +1,50 @@
+version: '3'
+networks:
+  seenet:
+services:
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tasks
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5434:5432"  # Expose the standard PostgreSQL port
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - seenet
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8000:8000"  # Nginx reverse proxy on port 80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - .:/usr/src/app
+    depends_on:
+      - web
+    networks:
+      - seenet
+
+  web:
+    build: .
+    container_name: django_local
+    command: bash -c "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && gunicorn project_settings.wsgi -b 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
+    expose:
+      - "8000"  # Expose Django app on port 8000 internally
+    depends_on:
+      - db
+    links:
+      - db:db
+    networks:
+      - seenet
+    environment:
+      POSTGRES_HOST: db  # Ensure Django connects to the db service
+      POSTGRES_PORT: 5432  # If using a different port
+volumes:
+  postgres_data:
