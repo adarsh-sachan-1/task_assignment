@@ -26,11 +26,9 @@
 [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
-###### 1: Production Environment 
+###### 2: Local Environment
 	docker-compose -f docker-compose.yml up -d --build
 
-###### 2: Local Environment
-    docker-compose -f docker-compose.yml up -d --build
 	Change database credential in .env file
 	
 	DB_NAME=postgres  
@@ -38,7 +36,5 @@
 	DB_PASSWORD=''  
 	DB_HOST=db  
 	DB_PORT=5432 
-	
-	docker-compose -f docker-compose-local.yml up -d --build
-	
+
 	Now you can access the server on 8004 port 
