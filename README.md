@@ -15,8 +15,11 @@
 * and now time to migrate the changes
     > python manage.py migrate
 * then run the server
-    > python manage.py runserver
+    > python manage.py runserver 
+*create superuser
+    > python manage.py cratesuperuser
 
+** Using the admin credentials, generate an API token by hitting the /api/token endpoint to obtain a JWT token, and then use this token to access other APIs.
 ### Docker Setup in local machine
 
 #### Create env file:-  
